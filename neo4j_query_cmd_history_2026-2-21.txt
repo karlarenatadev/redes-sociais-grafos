@@ -1,0 +1,476 @@
+MATCH (p:Post)-[:HAS_CATEGORY]->(c:Category),
+      (p)-[:HAS_MEDIA_TYPE]->(m:MediaType)
+RETURN 
+  c.name,
+  m.type,
+  avg(p.engagement) AS media,
+  stDev(p.engagement) AS desvio
+ORDER BY media DESC;
+
+MATCH (p:Post)-[:HAS_CATEGORY]->(c:Category),
+      (p)-[:HAS_MEDIA_TYPE]->(m:MediaType)
+WITH c, m, avg(p.engagement) AS score
+ORDER BY score DESC
+LIMIT 5
+RETURN c.name, m.type, score;
+
+MATCH (p:Post)-[:HAS_CATEGORY]->(c:Category),
+      (p)-[:HAS_MEDIA_TYPE]->(m:MediaType)
+RETURN c.name, m.type, avg(p.engagement) AS engajamento
+ORDER BY engajamento DESC
+LIMIT 10;
+
+MATCH (p:Post)-[:HAS_MEDIA_TYPE]->(m:MediaType)
+RETURN m.type, avg(p.engagement) AS engajamento
+ORDER BY engajamento DESC;
+
+MATCH (p:Post)-[:HAS_CATEGORY]->(c:Category)
+RETURN c.name, avg(p.engagement) AS engajamento_medio
+ORDER BY engajamento_medio DESC;
+
+MATCH (n)
+RETURN n 
+LIMIT 5;
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/redes-sociais-grafos/refs/heads/main/instagram.csv' AS row
+
+WITH row
+WHERE row.post_id IS NOT NULL
+
+MERGE (p:Post {id: row.post_id})
+SET p.likes = toInteger(row.likes),
+    p.comments = toInteger(row.comments),
+    p.engagement = toFloat(row.engagement_rate)
+
+MERGE (u:User {id: row.account_id})
+MERGE (u)-[:POSTED]->(p)
+
+WITH row, p
+WHERE row.content_category IS NOT NULL AND row.content_category <> ""
+
+MERGE (c:Category {name: row.content_category})
+MERGE (p)-[:HAS_CATEGORY]->(c)
+
+WITH row, p
+WHERE row.media_type IS NOT NULL AND row.media_type <> ""
+
+MERGE (m:MediaType {type: row.media_type})
+MERGE (p)-[:HAS_MEDIA_TYPE]->(m);
+
+CREATE INDEX FOR (p:Post) ON (p.id);
+CREATE INDEX FOR (u:User) ON (u.id);
+CREATE INDEX FOR (c:Category) ON (c.name);
+CREATE INDEX FOR (m:MediaType) ON (m.type);
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/redes-sociais-grafos/refs/heads/main/instagram.csv' AS row
+
+WITH row
+WHERE row.post_id IS NOT NULL
+
+MERGE (p:Post {id: row.post_id})
+SET p.likes = toInteger(row.likes),
+    p.comments = toInteger(row.comments),
+    p.engagement = toFloat(row.engagement_rate)
+
+MERGE (u:User {id: row.account_id})
+MERGE (u)-[:POSTED]->(p)
+
+WITH row, p
+WHERE row.content_category IS NOT NULL AND row.content_category <> ""
+
+MERGE (c:Category {name: row.content_category})
+MERGE (p)-[:HAS_CATEGORY]->(c)
+
+WITH row, p
+WHERE row.media_type IS NOT NULL AND row.media_type <> ""
+
+MERGE (m:MediaType {type: row.media_type})
+MERGE (p)-[:HAS_MEDIA_TYPE]->(m);
+
+MATCH (n:Post) RETURN n LIMIT 25;
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/redes-sociais-grafos/refs/heads/main/instagram.csv' AS row
+
+WITH row
+WHERE row.post_id IS NOT NULL
+
+MERGE (p:Post {id: row.post_id})
+SET p.likes = toInteger(row.likes),
+    p.comments = toInteger(row.comments),
+    p.engagement = toFloat(row.engagement_rate)
+
+MERGE (u:User {id: row.account_id})
+MERGE (u)-[:POSTED]->(p)
+
+WITH row, p
+WHERE row.content_category IS NOT NULL AND row.content_category <> ""
+
+MERGE (c:Category {name: row.content_category})
+MERGE (p)-[:HAS_CATEGORY]->(c)
+
+WITH row, p
+WHERE row.media_type IS NOT NULL AND row.media_type <> ""
+
+MERGE (m:MediaType {type: row.media_type})
+MERGE (p)-[:HAS_MEDIA_TYPE]->(m);
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/redes-sociais-grafos/refs/heads/main/instagram.csv' AS row
+
+WITH row
+WHERE row.post_id IS NOT NULL
+
+MERGE (p:Post {id: row.post_id})
+SET p.likes = toInteger(row.likes),
+    p.comments = toInteger(row.comments),
+    p.engagement = toFloat(row.engagement_rate)
+
+MERGE (u:User {id: row.account_id})
+MERGE (u)-[:POSTED]->(p)
+
+WITH row, p
+WHERE row.content_category IS NOT NULL AND row.content_category <> ""
+
+MERGE (c:Category {name: row.content_category})
+MERGE (p)-[:HAS_CATEGORY]->(c)
+
+WITH row, p
+WHERE row.media_type IS NOT NULL AND row.media_type <> ""
+
+MERGE (m:MediaType {type: row.media_type})
+MERGE (p)-[:HAS_MEDIA_TYPE]->(m);
+
+MATCH (p:Post)
+MERGE (u:User {id: p.account_id})
+MERGE (u)-[:POSTED]->(p);
+
+MATCH (p:Post)
+RETURN p
+LIMIT 5;
+
+MATCH (n)
+RETURN count(n);
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/redes-sociais-grafos/refs/heads/main/instagram.csv' AS row
+CREATE (p:Post {
+  id: row.post_id,
+  likes: toInteger(row.likes),
+  comments: toInteger(row.comments),
+  engagement: toFloat(row.engagement_rate)
+});
+
+MATCH (n)
+RETURN count(n);
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/redes-sociais-grafos/refs/heads/main/instagram.csv' AS row
+RETURN row
+LIMIT 5;
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/redes-sociais-grafos/refs/heads/main/instagram.csv' AS row;
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/redes-sociais-grafos/refs/heads/main/instagram.csv' AS row;
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/redes-sociais-grafos/refs/heads/main/instagram.csv' AS row;
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/redes-sociais-grafos/refs/heads/main/instagram.csv' AS row;
+
+LOAD CSV WITH HEADERS FROM 'https://www.kaggle.com/datasets/kundanbedmutha/instagram-analytics-dataset' AS row;
+
+LOAD CSV WITH HEADERS FROM 'https://www.kaggle.com/datasets/kundanbedmutha/instagram-analytics-dataset' AS row;
+
+LOAD CSV WITH HEADERS FROM 'https://www.kaggle.com/datasets/kundanbedmutha/instagram-analytics-dataset/data' AS row;
+
+:welcome
+
+USING PERIODIC COMMIT 1000
+LOAD CSV WITH HEADERS FROM
+"https://raw.githubusercontent.com/karlarenatadev/algoritmo-recomendacao-de-musicas-em-grafos/main/dance_pop_playlist_tracks_data.csv"
+AS row
+
+WITH row
+WHERE row.track_id IS NOT NULL 
+AND row.track_id <> ""
+
+MERGE (t:Track {id: row.track_id})
+SET t.name = row.track_name,
+    t.popularity = toInteger(row.popularity),
+    t.energy = toFloat(row.energy),
+    t.danceability = toFloat(row.danceability)
+
+MERGE (a:Artist {id: row.artist_id})
+SET a.name = row.artist_name
+
+MERGE (t)-[:DO_ARTISTA]->(a);
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/algoritmo-recomendacao-de-musicas-em-grafos/refs/heads/main/users.csv' AS row 
+MERGE (u:User {id: row.user_id})
+SET u.name = row.name,
+    u.age = toInteger(row.age);
+
+LOAD CSV WITH HEADERS FROM 'https://raw.githubusercontent.com/karlarenatadev/algoritmo-recomendacao-de-musicas-em-grafos/refs/heads/main/users.csv' AS row RETURN row LIMIT 20;
+
+LOAD CSV WITH HEADERS FROM 'https://github.com/karlarenatadev/algoritmo-recomendacao-de-musicas-em-grafos.git' AS row RETURN row LIMIT 20;
+
+LOAD CSV WITH HEADERS FROM 'https://github.com/karlarenatadev/algoritmo-recomendacao-de-musicas-em-grafos/blob/main/users.csv' AS row RETURN row LIMIT 20;
+
+LOAD CSV WITH HEADERS FROM 'https://github.com/karlarenatadev/algoritmo-recomendacao-de-musicas-em-grafos/blob/main/users.csv' AS row RETURN row LIMIT 20;
+
+LOAD CSV WITH HEADERS FROM 
+'https://github.com/karlarenatadev/algoritmo-recomendacao-de-musicas-em-grafos/blob/main/users.csv' AS row MERGE (u:User {id:row.user_id})
+SET u.name = row.name,
+    u.age = toInteger(row.age);
+
+MATCH (n)
+DETACH DELETE n;
+
+DETACH DELETE;
+
+MATCH p=()-[]->() RETURN p LIMIT 25;
+
+MATCH (n:Playlist) RETURN n LIMIT 25;
+
+MATCH (n:Music) RETURN n LIMIT 25;
+
+MATCH (n:Movie) RETURN n LIMIT 25;
+
+MATCH (n:Genre) RETURN n LIMIT 25;
+
+MATCH (n:Artist) RETURN n LIMIT 25;
+
+MATCH (n:Actor) RETURN n LIMIT 25;
+
+LOAD CSV WITH HEADERS FROM 'file:///artist_tracks_data.csv' AS row
+MERGE (a:Artist {id: row.artist_id})
+SET a.name = row.artist_name
+
+MERGE (m:Music {id: row.track_id})
+SET m.title = row.track_name
+
+MERGE (m)-[:DO_ARTISTA]->(a);
+
+LOAD CSV WITH HEADERS FROM 'file:///artist_tracks_data.csv' AS row
+MERGE (a:Artist {id: row.artist_id})
+SET a.name = row.artist_name
+
+MERGE (m:Music {id: row.track_id})
+SET m.title = row.track_name
+
+MERGE (m)-[:DO_ARTISTA]->(a);
+
+LOAD CSV WITH HEADERS FROM 'file:///artist_tracks_data.csv' AS row
+MERGE (a:Artist {id: row.artist_id})
+SET a.name = row.artist_name
+
+MERGE (m:Music {id: row.track_id})
+SET m.title = row.track_name
+
+MERGE (m)-[:DO_ARTISTA]->(a);
+
+CREATE INDEX artist_id IF NOT EXISTS FOR (a:Artist) ON (a.id);
+CREATE INDEX track_id IF NOT EXISTS FOR (m:Music) ON (m.id);
+CREATE INDEX playlist_id IF NOT EXISTS FOR (p:Playlist) ON (p.id);
+
+MATCH (n) RETURN n;
+
+MATCH (n:Movie) RETURN n LIMIT 25;
+
+MATCH (n:Genre) RETURN n LIMIT 25;
+
+MATCH (n:Actor) RETURN n LIMIT 25;
+
+MATCH (n) RETURN n LIMIT 25;
+
+//CRIANDO RELACIONAMENTOS
+//ator atuou no filme
+MATCH (a:Actor {nome:"Leonardo DiCaprio"}), (m:Movie {nome:"Inception"})
+CREATE (a)-[:ACTED_IN]->(m);
+
+MATCH (a:Actor {nome:"Christian Bale"}), (m:Movie {nome:"The Dark Knight"})
+CREATE (a)-[:ACTED_IN]->(m);
+
+MATCH (a:Actor {nome:"Kate Winslet"}), (m:Movie {nome:"Titanic"})
+CREATE (a)-[:ACTED_IN]->(m);
+
+MATCH (a:Actor {nome:"Robert Downey Jr."}), (m:Movie {nome:"Avengers: Endgame"})
+CREATE (a)-[:ACTED_IN]->(m);
+
+MATCH (a:Actor {nome:"Matthew McConaughey"}), (m:Movie {nome:"Interstellar"})
+CREATE (a)-[:ACTED_IN]->(m);
+
+MATCH (a:Actor {nome:"Keanu Reeves"}), (m:Movie {nome:"The Matrix"})
+CREATE (a)-[:ACTED_IN]->(m);
+
+MATCH (a:Actor {nome:"Emma Stone"}), (m:Movie {nome:"La La Land"})
+CREATE (a)-[:ACTED_IN]->(m);
+
+MATCH (a:Actor {nome:"Song Kang-ho"}), (m:Movie {nome:"Parasite"})
+CREATE (a)-[:ACTED_IN]->(m);
+
+MATCH (a:Actor {nome:"Joaquin Phoenix"}), (m:Movie {nome:"Joker"})
+CREATE (a)-[:ACTED_IN]->(m);
+
+MATCH (a:Actor {nome:"Tom Hanks"}), (m:Movie {nome:"Forrest Gump"})
+CREATE (a)-[:ACTED_IN]->(m);
+
+
+//filme no genero
+MATCH (m:Movie {nome:"Inception"}), (g:Genre {nome:"Ficção Cientifica"})
+CREATE (m)-[:IN_GENRE]->(g);
+
+MATCH (m:Movie {nome:"The Dark Knight"}), (g:Genre {nome:"Acao"})
+CREATE (m)-[:IN_GENRE]->(g);
+
+MATCH (m:Movie {nome:"Titanic"}), (g:Genre {nome:"Romance"})
+CREATE (m)-[:IN_GENRE]->(g);
+
+MATCH (m:Movie {nome:"Avengers: Endgame"}), (g:Genre {nome:"Superheroi"})
+CREATE (m)-[:IN_GENRE]->(g);
+
+MATCH (m:Movie {nome:"Interstellar"}), (g:Genre {nome:"Ficção Cientifica"})
+CREATE (m)-[:IN_GENRE]->(g);
+
+MATCH (m:Movie {nome:"The Matrix"}), (g:Genre {nome:"Acao"})
+CREATE (m)-[:IN_GENRE]->(g);
+
+MATCH (m:Movie {nome:"La La Land"}), (g:Genre {nome:"Musical"})
+CREATE (m)-[:IN_GENRE]->(g);
+
+MATCH (m:Movie {nome:"Parasite"}), (g:Genre {nome:"Drama"})
+CREATE (m)-[:IN_GENRE]->(g);
+
+MATCH (m:Movie {nome:"Joker"}), (g:Genre {nome:"Drama"})
+CREATE (m)-[:IN_GENRE]->(g);
+
+MATCH (m:Movie {nome:"Forrest Gump"}), (g:Genre {nome:"Drama"})
+CREATE (m)-[:IN_GENRE]->(g);
+
+// criando atores
+MERGE(a1:Actor {nome: "Leonardo DiCaprio"})
+MERGE(a2:Actor {nome: "Christian Bale"})
+MERGE(a3:Actor {nome: "Kate Winslet"})
+MERGE(a4:Actor {nome: "Robert Downey Jr."})
+MERGE(a5:Actor {nome: "Matthew McConaughey"})
+MERGE(a6:Actor {nome: "Keanu Reeves"})
+MERGE(a7:Actor {nome: "Emma Stone"})
+MERGE(a8:Actor {nome:"Song Kang-ho"})
+MERGE(a9:Actor {nome:"Joaquin Phoenix"})
+MERGE(a10:Actor {nome: "Tom Hanks"})
+
+//criando filmes
+MERGE(m1:Movie {nome:"Inception"})
+MERGE(m2:Movie {nome: "The Dark Knight"})
+MERGE(m3:Movie {nome: "Titanic"})
+MERGE(m4:Movie {nome: "Avengers: Endgame"})
+MERGE(m5:Movie {nome: "Interstellar"})
+MERGE(m6:Movie {nome:"The Matrix"})
+MERGE(m7:Movie {nome:"La La Land"})
+MERGE(m8:Movie {nome:"Parasite"})
+MERGE(m9:Movie {nome:"Joker"})
+MERGE(m10:Movie {nome:"Forest Gump"})
+
+//criando gêneros dos filmes
+MERGE(g1:Genre {nome:"Ficção Cientifica"})
+MERGE(g2:Genre {nome:"Acao"})
+MERGE(g3:Genre {nome:"Romance"})
+MERGE(g4:Genre {nome:"Superheroi"})
+MERGE(g5:Genre {nome:"Musical"})
+MERGE(g6:Genre {nome:"Drama"});
+
+// criando atores
+MERGE(a1:Actor {nome: "Leonardo DiCaprio"})
+MERGE(a2:Actor {nome: "Christian Bale"})
+MERGE(a3:Actor {nome: "Kate Winslet"})
+MERGE(a4:Actor {nome: "Robert Downey Jr."})
+MERGE(a5:Actor {nome: "Matthew McConaughey"})
+MERGE(a6:Actor {nome: "Keanu Reeves"})
+MERGE(a7:Actor {nome: "Emma Stone"})
+MERGE(a8:Actor {nome:"Song Kang-ho"})
+MERGE(a9:Actor {nome:"Joaquin Phoenix"})
+MERGE(a10:Actor {nome: "Tom Hanks"})
+
+//criando filmes
+MERGE(m1:Movie {nome:"Inception"})
+MERGE(m2:Movie {nome: "The Dark Knight"})
+MERGE(m3:Movie {nome: "Titanic"})
+MERGE(m4:Movie {nome: "Avengers: Endgame"})
+MERGE(m5:Movie {nome: "Interstellar"})
+MERGE(m6:Movie {nome:"The Matrix"})
+MERGE(m7:Movie {nome:"La La Land"})
+MERGE(m8:Movie {nome:"Parasite"})
+MERGE(m9:Movie {nome:"Joker"})
+MERGE(m10:Movie {nome:"Forest Gump"})
+
+//criando gêneros dos filmes
+MERGE(g1:Genre {nome:"Ficção Cientifica"})
+MERGE(g2:Genre {nome:"Acao"})
+MERGE(g3:Genre {nome:"Romance"})
+MERGE(g4:Genre {nome:"Superheroi"})
+MERGE(g5:Genre {nome:"Musical"})
+MERGE(g6:Genre {nome:"Drama"});
+
+// criando atores
+CREATE(a1:Actor {nome: "Leonardo DiCaprio"})
+CREATE(a2:Actor {nome: "Christian Bale"})
+CREATE(a3:Actor {nome: "Kate Winslet"})
+CREATE(a4:Actor {nome: "Robert Downey Jr."})
+CREATE(a5:Actor {nome: "Matthew McConaughey"})
+CREATE(a6:Actor {nome: "Keanu Reeves"})
+CREATE(a7:Actor {nome: "Emma Stone"})
+CREATE(a8:Actor {nome:"Song Kang-ho"})
+CREATE(a9:Actor {nome:"Joaquin Phoenix"})
+CREATE(a10:Actor {nome: "Tom Hanks"})
+
+//criando filmes
+CREATE(m1:Movie {nome:"Inception"})
+CREATE(m2:Movie {nome: "The Dark Knight"})
+CREATE(m3:Movie {nome: "Titanic"})
+CREATE(m4:Movie {nome: "Avengers: Endgame"})
+CREATE(m5:Movie {nome: "Interstellar"})
+CREATE(m6:Movie {nome:"The Matrix"})
+CREATE(m7:Movie {nome:"La La Land"})
+CREATE(m8:Movie {nome:"Parasite"})
+CREATE(m9:Movie {nome:"Joker"})
+CREATE(m10:Movie {nome:"Forest Gump"})
+
+//criando gêneros dos filmes
+CREATE(g1:Genre {nome:"Ficção Cientifica"})
+CREATE(g2:Genre {nome:"Acao"})
+CREATE(g3:Genre {nome:"Romance"})
+CREATE(g4:Genre {nome:"Superheroi"})
+CREATE(g5:Genre {nome:"Musical"})
+CREATE(g6:Genre {nome:"Drama"});
+
+// criando atores
+CREATE(a1:Actor {nome: "Leonardo DiCaprio"})
+CREATE(a2:Actor {nome: "Christian Bale"})
+CREATE(a3:Actor {nome: "Kate Winslet"})
+CREATE(a4:Actor {nome: "Robert Downey Jr."})
+CREATE(a5:Actor {nome: "Matthew McConaughey"})
+CREATE(a6:Actor {nome: "Keanu Reeves"})
+CREATE(a7:Actor {nome: "Emma Stone"})
+CREATE(a8:Actor {nome:"Song Kang-ho"})
+CREATE(a9:Actor {nome:"Joaquin Phoenix"})
+CREATE(a10:Actor {nome: "Tom Hanks"})
+
+//criando filmes
+CREATE(m1:Movie {nome:"Inception"})
+CREATE(m2 {nome: "The Dark Knight"})
+CREATE(m3:Movie {nome: "Titanic"})
+CREATE(m4:Movie {nome: "Avengers: Endgame"})
+CREATE(m5:Movie {nome: "Interstellar"})
+CREATE(m6:Movie {nome:"The Matrix"})
+CREATE(m7:Movie {nome:"La La Land"})
+CREATE(m8:Movie {nome:"Parasite"})
+CREATE(m9:Movie {nome:"Joker"})
+CREATE(m10:Movie {nome:"Forest Gump"})
+
+//criando gêneros dos filmes
+CREATE(g1:Genre {nome:"Ficção Cientifica"})
+CREATE(g2:Genre {nome:"Acao"})
+CREATE(g3:Genre {nome:"Romance"})
+CREATE(g4:Genre {nome:"Superheroi"})
+CREATE(g5:Genre {nome:"Musical"})
+CREATE(g6:Genre {nome:"Drama"});
+
+:connect
+
+:welcome
